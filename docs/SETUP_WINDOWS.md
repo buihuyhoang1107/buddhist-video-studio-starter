@@ -33,4 +33,6 @@ The starter default is `qwen2.5:7b`; change `OLLAMA_MODEL` if you use another mo
 ## ComfyUI — optional
 Run ComfyUI locally, normally at `http://127.0.0.1:8188`.
 
-Codex 02 should later bind `src/server/comfyui/client.ts` to a concrete workflow JSON.
+The studio now includes a configurable API workflow template and per-scene image provider.
+See [local AI setup](LOCAL_AI_SETUP.md) for the sibling repos, Python environments,
+`npm run comfyui`, checkpoint selection, `npm run doctor`, and the image CLI.

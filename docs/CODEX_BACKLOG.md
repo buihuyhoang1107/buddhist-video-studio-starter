@@ -30,11 +30,11 @@
 
 ## Sprint 1 — Image generation
 
-- [ ] Define ComfyUI workflow JSON template.
-- [ ] Submit prompt to local ComfyUI.
-- [ ] Poll image generation job.
-- [ ] Copy result into temp job folder.
-- [ ] Add retry/replacement UI.
+- [x] Define ComfyUI workflow JSON template (configurable checkpoint/API template).
+- [x] Submit prompt to local ComfyUI.
+- [x] Poll image generation job.
+- [x] Copy result into temp job folder (decode validation and explicit per-scene replacement).
+- [x] Add retry/replacement UI (missing-image batch, stop after current image, per-scene confirmation).
 - [ ] Add style reference image support.
 
 ## Sprint 2 — Character consistency

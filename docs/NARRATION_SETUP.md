@@ -57,8 +57,10 @@ app. Keep both the studio and local speech service running during TTS generation
 Upload narration to use the video flow without installing a TTS model.
 
 After initial `uv sync`, you can start the speech server directly from this project's
-terminal with `npm run tts`. It uses `D:\ai-tools\VieNeu-TTS\.venv` on Windows.
-Set the shell environment variable `VIENEU_REPO` when your clone is elsewhere.
+terminal with `npm run tts`. It first uses the sibling `../VieNeu-TTS/.venv`,
+then the legacy `D:\ai-tools\VieNeu-TTS\.venv` location on Windows.
+Set `VIENEU_REPO` or `VIENEU_PYTHON` in `.env.local` or the shell for another location.
+See [workspace local AI setup](LOCAL_AI_SETUP.md) when both repos already exist beside the studio.
 
 ## Validation
 

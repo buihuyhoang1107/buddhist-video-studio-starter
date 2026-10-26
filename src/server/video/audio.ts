@@ -9,6 +9,7 @@ import { writeJson } from "@/server/filesystem/json-file";
 import { updateJob } from "@/server/jobs/job-repository";
 import { runFfmpeg } from "@/server/ffmpeg/run";
 import { mediaPath, VideoError } from "./job-assets";
+import { getStudioSettings } from "@/server/studio/settings";
 
 export async function normalizeAudio(input: string, pcm: string) {
   // Streaming WAV (including VieNeu) uses 0xffffffff sizes until EOF. Finalize those
@@ -52,7 +53,7 @@ export async function prepareNarration(id: string, board: Storyboard, config: Vi
   }
   const directory = path.join(jobDir(id), "voice");
   await fs.mkdir(directory, { recursive: true });
-  const provider = new VieneuVoiceProvider(directory);
+  const provider = new VieneuVoiceProvider(directory, await getStudioSettings());
   const fingerprint = createHash("sha256").update(provider.fingerprint()).update(JSON.stringify(board.scenes.map(scene => scene.narration))).digest("hex");
   if (board.audio?.fingerprint === fingerprint) {
     try { await fs.access(mediaPath(id, board.audio.path)); return board.audio; } catch { /* Reuse segment cache if the joined file was removed. */ }

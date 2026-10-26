@@ -1,3 +1,5 @@
+import { getStudioSettings } from "@/server/studio/settings";
+
 export interface OllamaGenerateRequest {
   model: string;
   prompt: string;
@@ -6,8 +8,9 @@ export interface OllamaGenerateRequest {
 }
 
 export async function ollamaGenerate<T>(prompt: string): Promise<T> {
-  const baseUrl = process.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434";
-  const model = process.env.OLLAMA_MODEL ?? "qwen2.5:7b";
+  const settings = await getStudioSettings();
+  const baseUrl = settings.ollamaBaseUrl.replace(/\/$/, "");
+  const model = settings.ollamaModel;
 
   let response: Response;
   try {

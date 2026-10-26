@@ -25,14 +25,21 @@ npm run dev
 Optional local AI:
 - Ollama for story/script generation.
 - VieNeu open-source local TTS for Vietnamese narration; uploaded narration is also supported.
-- ComfyUI image generation is planned. Upload one image, a looping background video, or individual scene images.
+- ComfyUI generates scene images directly from the storyboard UI. Uploaded images remain supported.
+
+For the sibling `ComfyUI` and `VieNeu-TTS` repos in this workspace, see
+[local AI setup](docs/LOCAL_AI_SETUP.md). Configure service URLs, checkpoint, and voice
+in **Dịch vụ tạo ảnh và giọng đọc**, save, and start installed services from the UI.
+Python dependencies and models need a one-time setup. CLI tools remain optional.
 
 ## Create an MP4
 
 1. Enter the complete story (or ask Ollama to write a short/medium/long connected story).
-2. Choose a shared still image or looping MP4/WebM background; individual scene images remain optional.
+2. Upload a shared still/looping video, upload individual images, or click **Tạo ảnh cho các đoạn còn thiếu**.
+   Existing images are preserved. **Tạo lại ảnh đoạn này** asks before replacing a single image.
 3. Upload the complete narration, or choose local VieNeu TTS. Video length follows actual audio;
-   before speech exists, the UI labels text-based timing as an estimate. No target duration is required.
+   Click **Tạo và nghe giọng đọc** to preview local narration before rendering.
+   Before speech exists, the UI labels text-based timing as an estimate. No target duration is required.
 4. Confirm you have reviewed the script, subtitles, visuals, and uploaded audio, then click **Tạo video MP4**.
 5. Keep the Next.js process running. When rendering completes, preview and download the MP4.
 6. To replace one visual, upload a new background or scene image and render again. Unchanged
@@ -51,6 +58,7 @@ See [narration setup](docs/NARRATION_SETUP.md) to run the free local VieNeu spee
 
 ```powershell
 npm run typecheck
+npm run lint
 npm test
 # With npm run dev running in another terminal:
 npm run test:video
@@ -69,6 +77,7 @@ voice quality), run:
 $env:STUDIO_BUILD_DIR = '.next-validation'
 npm run build
 npm run test:narration
+npm run test:ui
 ```
 
 ## Important

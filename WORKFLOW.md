@@ -21,7 +21,13 @@ Failure state: `FAILED`.
 `IMAGES` pauses for manual per-scene uploads and human review. Rendering resumes through
 `POST /api/jobs/:id/render` only after the saved Dharma review passes and the user confirms
 approval. The narration-first extension supports local TTS, uploaded narration, and a shared
-still/looping video background, as well as silent export. AI image generation remains pending.
+still/looping video background, as well as silent export. Individual scene images can also
+be generated on demand through the storyboard UI and ComfyUI provider after Dharma review; see
+`docs/LOCAL_AI_SETUP.md`. Existing images require explicit replacement, and failed generation
+preserves the previous image. Human approval is still required before rendering.
+The UI can generate only missing scene images, retry a failed scene, explicitly replace
+one image, preview VieNeu narration before render, and save local service/model settings.
+Settings apply to subsequent operations immediately; uploaded images/audio remain overrides.
 Legacy storyboard-only COMPLETED jobs can resume by ID.
 New COMPLETED jobs have an outputPath. Failed renders retain inputs for retry, and unchanged
 scene clips are reused when one image changes. See `docs/UPLOAD_RENDER_CONTRACT.md`.

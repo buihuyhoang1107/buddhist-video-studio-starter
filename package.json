@@ -6,30 +6,43 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/video.test.cjs",
+    "test": "node --test tests/video.test.cjs tests/comfyui.test.cjs",
     "test:video": "node --test tests/video.integration.cjs",
     "test:narration": "node --test tests/narration.integration.cjs",
-    "tts": "node scripts/start-vieneu.cjs"
+    "test:ui": "node --test tests/studio-ui.integration.cjs",
+    "tts": "node scripts/start-vieneu.cjs",
+    "comfyui": "node scripts/start-comfyui.cjs",
+    "doctor": "node scripts/doctor.cjs",
+    "image": "node scripts/generate-image.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.3.1",
+    "@mui/system": "^7.3.11",
+    "axios": "^1.20.0",
     "ffmpeg-static": "^5.3.0",
+    "formik": "^2.4.9",
+    "material-symbols": "^0.48.1",
     "next": "^15.5.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "uuid": "^11.1.0"
+    "sevago-library": "^1.7.1",
+    "swr": "^2.5.1",
+    "uuid": "^11.1.0",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.7",
     "@types/node": "^22.18.0",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "@types/uuid": "^10.0.0",
     "eslint": "^9.34.0",
     "eslint-config-next": "^15.5.0",
+    "playwright": "^1.64.1",
     "typescript": "^5.9.2"
   }
 }

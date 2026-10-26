@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import "sevago-library/dist/sevago-library.css";
+import "material-symbols/rounded.css";
 import "./styles.css";
 
 export const metadata: Metadata = {

@@ -75,7 +75,7 @@ test('audio-driven narration, repeating image/video backgrounds, manual audio pr
   try {
     await fs.access(path.join(root, '.next-validation', 'BUILD_ID'));
     child = spawn(process.execPath, [path.join(root, 'node_modules/next/dist/bin/next'), 'start', '-p', String(port)], {
-      cwd: root, env: { ...process.env, STUDIO_BUILD_DIR: '.next-validation', VIENEU_BASE_URL: `http://127.0.0.1:${speech.address().port}`, VIENEU_API_KEY: '', VIENEU_VOICE: 'Test voice' }, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']
+      cwd: root, env: { ...process.env, STUDIO_BUILD_DIR: '.next-validation', STUDIO_SETTINGS_PATH: path.join(root, 'temp', `narration-test-${port}.json`), VIENEU_BASE_URL: `http://127.0.0.1:${speech.address().port}`, VIENEU_API_KEY: '', VIENEU_VOICE: 'Test voice' }, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe']
     });
     for (const stream of [child.stdout, child.stderr]) stream.on('data', chunk => { logs = (logs + chunk).slice(-10000); });
     let ready = false;
