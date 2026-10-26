@@ -1,0 +1,11 @@
+node_modules/
+.next/
+.next-validation/
+.env.local
+output/*
+!output/.gitkeep
+temp/*
+!temp/.gitkeep
+user-assets/*
+!user-assets/.gitkeep
+*.log

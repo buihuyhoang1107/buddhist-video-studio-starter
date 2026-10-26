@@ -1,0 +1,18 @@
+{
+  "id": "senior-story",
+  "version": 1,
+  "steps": [
+    "content",
+    "dharma-review",
+    "storyboard",
+    "images",
+    "voice",
+    "render",
+    "qa"
+  ],
+  "defaults": {
+    "durationSeconds": 75,
+    "aspectRatio": "9:16",
+    "mediaMode": "IMAGE_VIDEO"
+  }
+}
