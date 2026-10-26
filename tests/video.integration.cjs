@@ -31,7 +31,8 @@ test('upload → approval → render → range/download → per-scene replacemen
     const start = await json('/api/jobs/start', { title: 'Kiểm tra render', audience: 'CHILD', contentMode: 'USER_STORY', imageMode: 'USER_UPLOAD', voiceMode: 'NONE', mediaMode: 'IMAGE_VIDEO', durationSeconds: 6, theme: 'Lòng tốt', story: 'An rót nước cho bà. Bà mỉm cười.' });
     assert.equal(start.status, 202);
     id = (await start.json()).id;
-    assert.equal((await waitFor(['IMAGES', 'FAILED'])).status, 'IMAGES');
+    const prepared = await waitFor(['IMAGES', 'FAILED']);
+    assert.equal(prepared.status, 'IMAGES', prepared.error);
     const board = await (await fetch(`${base}/api/jobs/${id}/storyboard`)).json();
     assert.ok(board.scenes.length >= 2);
     assert.equal((await json(`/api/jobs/${id}/render`, { approved: false })).status, 400);
@@ -89,7 +90,7 @@ test('upload → approval → render → range/download → per-scene replacemen
     const legacy = JSON.parse(await fs.readFile(jobFile, 'utf8'));
     legacy.config.voiceMode = 'LOCAL_TTS';
     await fs.writeFile(jobFile, JSON.stringify(legacy));
-    assert.equal((await json(`/api/jobs/${id}/render`, { approved: true })).status, 400);
+    assert.equal((await json(`/api/jobs/${id}/render`, { approved: true, voiceMode: 'USER_AUDIO' })).status, 400);
     assert.equal((await json(`/api/jobs/${id}/render`, { approved: true, withoutVoice: true })).status, 202);
     rendering = true;
     assert.equal((await waitFor(['COMPLETED', 'FAILED'])).status, 'COMPLETED');

@@ -32,7 +32,7 @@ export async function generateVideo(jobId: string, config: VideoProjectConfig) {
     await updateJob(jobId, {
       status: "IMAGES",
       progress: 60,
-      currentStep: "Chờ bạn duyệt nội dung và upload ảnh cho từng cảnh"
+      currentStep: "Chờ duyệt lời kể, chọn nền minh họa và giọng đọc"
     });
   } catch (error) {
     await updateJob(jobId, {

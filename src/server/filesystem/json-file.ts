@@ -7,7 +7,15 @@ export async function writeJson(filePath: string, value: unknown) {
   const temporary = `${filePath}.${randomUUID()}.tmp`;
   try {
     await fs.writeFile(temporary, JSON.stringify(value, null, 2), "utf8");
-    await fs.rename(temporary, filePath);
+    for (let attempt = 0; ; attempt++) {
+      try { await fs.rename(temporary, filePath); break; }
+      catch (error) {
+        const code = (error as NodeJS.ErrnoException).code;
+        if (attempt >= 5 || !["EACCES", "EPERM", "EBUSY"].includes(code || "")) throw error;
+        // Windows scanners can briefly hold a newly written metadata file.
+        await new Promise(resolve => setTimeout(resolve, 25 * (attempt + 1)));
+      }
+    }
   } finally {
     await fs.rm(temporary, { force: true });
   }

@@ -1,12 +1,12 @@
 import { spawn } from "node:child_process";
 import ffmpegPath from "ffmpeg-static";
 
-export async function runFfmpeg(args: string[], cwd?: string): Promise<void> {
+export async function runFfmpeg(args: string[], cwd?: string, timeout = 180000): Promise<void> {
   const configured = process.env.FFMPEG_PATH;
   const executable = configured && configured !== "ffmpeg" ? configured : ffmpegPath ?? "ffmpeg";
 
   await new Promise<void>((resolve, reject) => {
-    const child = spawn(executable, ["-nostdin", ...args], { cwd, stdio: ["ignore", "pipe", "pipe"], windowsHide: true, timeout: 180000 });
+    const child = spawn(executable, ["-nostdin", ...args], { cwd, stdio: ["ignore", "ignore", "pipe"], windowsHide: true, timeout });
     let stderr = "";
 
     child.stderr.on("data", (chunk) => {

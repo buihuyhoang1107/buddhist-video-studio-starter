@@ -7,6 +7,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   try {
     const { id } = await context.params;
     const body = await request.json();
-    return NextResponse.json(await startRender(id, body.approved === true, body.withoutVoice === true), { status: 202 });
+    return NextResponse.json(await startRender(id, body.approved === true, body.withoutVoice === true, body.voiceMode), { status: 202 });
   } catch (error) { return videoError(error); }
 }

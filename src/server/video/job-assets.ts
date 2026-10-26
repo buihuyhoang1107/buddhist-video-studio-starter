@@ -40,10 +40,17 @@ export function assetPath(id: string, name: string) {
   return path.join(jobDir(id), "images", name);
 }
 
+export function mediaPath(id: string, name: string) {
+  if (!/^[0-9a-f-]+\.(png|jpg|webp|mp4|webm|wav|input)$/i.test(name)) throw new VideoError("Tài nguyên không hợp lệ.");
+  return path.join(jobDir(id), "media", name);
+}
+
 export async function storyboardView(id: string): Promise<StoryboardView> {
   const board = await loadStoryboard(id);
   return {
     title: board.title,
+    background: board.background ? { kind: board.background.kind, url: `/api/jobs/${id}/media?kind=background&v=${board.background.path}` } : undefined,
+    audio: board.audio ? { url: `/api/jobs/${id}/media?kind=audio&v=${board.audio.path}`, provider: board.audio.provider, durationSeconds: board.audio.durationSeconds, timing: board.audio.timing } : undefined,
     scenes: board.scenes.map(({ imagePath, ...scene }) => ({
       ...scene,
       imageUrl: imagePath ? `/api/jobs/${id}/scenes/${scene.id}/image?v=${encodeURIComponent(imagePath)}` : undefined

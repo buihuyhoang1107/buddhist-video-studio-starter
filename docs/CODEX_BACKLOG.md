@@ -17,14 +17,16 @@
 - [ ] Add reference library loader.
 
 ### Video/UX
-- [ ] Build job progress UI.
+- [x] Build job progress UI.
 - [ ] Add story editing screen before storyboard.
-- [ ] Add per-scene image upload.
-- [ ] Implement FFmpeg image-to-video scene renderer.
-- [ ] Concatenate scenes.
-- [ ] Add ASS/SRT subtitles.
-- [ ] Add optional voice track.
-- [ ] Add preview/export screen.
+- [x] Add per-scene image upload.
+- [x] Implement FFmpeg image-to-video scene renderer.
+- [x] Concatenate scenes.
+- [x] Add ASS subtitles (SRT export pending).
+- [x] Add optional voice track.
+- [x] Add preview/export screen.
+- [x] Add one shared still or looping video background.
+- [x] Use full narration and measured audio duration; remove the ten-sentence cutoff.
 
 ## Sprint 1 — Image generation
 
@@ -44,18 +46,18 @@
 
 ## Sprint 3 — Voice
 
-- [ ] Local TTS adapter.
+- [x] Local TTS adapter (VieNeu local speech API).
 - [ ] CHILD narrator preset.
 - [ ] SENIOR narrator preset.
-- [ ] Audio normalization.
-- [ ] User-audio override.
+- [x] Audio format/sample-rate normalization (loudness normalization pending).
+- [x] User-audio override.
 
 ## Sprint 4 — Quality
 
-- [ ] Video technical QA.
+- [x] Video decode QA (expanded technical checks pending).
 - [ ] Subtitle safe-area checks.
 - [ ] Loudness checks.
-- [ ] Per-scene regeneration.
+- [x] Per-scene image replacement/render cache and per-segment voice cache.
 
 ## Future only
 

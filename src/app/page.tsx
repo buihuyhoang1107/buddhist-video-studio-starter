@@ -17,17 +17,21 @@ import {
   Typography
 } from "@mui/material";
 import type { GenerationJob } from "@/core/contracts/job";
-import type { Audience, ContentMode, ImageMode, VideoProjectConfig, VoiceMode } from "@/core/contracts/project";
+import type { Audience, ContentMode, VideoProjectConfig, VoiceMode } from "@/core/contracts/project";
 import { StoryboardWorkspace } from "./components/storyboard-workspace";
+import { estimateDuration } from "@/core/narration/timing";
 
 const defaultConfig: VideoProjectConfig = {
   title: "Cốc nước cho bà",
   audience: "CHILD",
   contentMode: "USER_STORY",
   imageMode: "USER_UPLOAD",
-  voiceMode: "NONE",
+  voiceMode: "LOCAL_TTS",
   mediaMode: "IMAGE_VIDEO",
   durationSeconds: 45,
+  durationMode: "CONTENT",
+  backgroundMode: "SINGLE_IMAGE",
+  storyLength: "MEDIUM",
   theme: "Lòng hiếu thảo",
   story: "Một buổi chiều, An thấy bà đang mệt. Em nhẹ nhàng rót cho bà một cốc nước và ngồi bên cạnh. Bà mỉm cười. An hiểu rằng yêu thương đôi khi bắt đầu từ một việc rất nhỏ."
 };
@@ -132,29 +136,32 @@ export default function HomePage() {
             )}
 
             <FormControl fullWidth>
-              <InputLabel>Hình ảnh</InputLabel>
-              <Select label="Hình ảnh" value={config.imageMode} onChange={(e) => setConfig({ ...config, imageMode: e.target.value as ImageMode })}>
-                <MenuItem value="AI_GENERATE" disabled>AI local tự tạo (sắp có)</MenuItem>
-                <MenuItem value="USER_UPLOAD">Tôi upload</MenuItem>
-                <MenuItem value="MIXED" disabled>Kết hợp (sắp có)</MenuItem>
+              <InputLabel>Nền minh họa</InputLabel>
+              <Select label="Nền minh họa" value={config.backgroundMode} onChange={(e) => setConfig({ ...config, backgroundMode: e.target.value as VideoProjectConfig["backgroundMode"] })}>
+                <MenuItem value="SINGLE_IMAGE">Một ảnh cho toàn bộ truyện</MenuItem>
+                <MenuItem value="LOOP_VIDEO">Một video nền lặp liên tục</MenuItem>
+                <MenuItem value="PER_SCENE">Ảnh riêng cho từng đoạn</MenuItem>
               </Select>
             </FormControl>
 
             <FormControl fullWidth>
               <InputLabel>Voice</InputLabel>
               <Select label="Voice" value={config.voiceMode} onChange={(e) => setConfig({ ...config, voiceMode: e.target.value as VoiceMode })}>
-                <MenuItem value="NONE">Chưa dùng voice</MenuItem>
-                <MenuItem value="LOCAL_TTS" disabled>Local TTS (sắp có)</MenuItem>
-                <MenuItem value="USER_AUDIO" disabled>Tôi upload audio (sắp có)</MenuItem>
+                <MenuItem value="LOCAL_TTS">Tự đọc tiếng Việt — VieNeu local</MenuItem>
+                <MenuItem value="USER_AUDIO">Upload giọng đọc toàn bộ truyện</MenuItem>
+                <MenuItem value="NONE">Không giọng đọc — ước tính theo truyện</MenuItem>
               </Select>
             </FormControl>
 
-            <TextField
-              label="Thời lượng mục tiêu (giây)"
-              type="number"
-              value={config.durationSeconds}
-              onChange={(e) => setConfig({ ...config, durationSeconds: Number(e.target.value) || 45 })}
-            />
+            {config.contentMode === "AI_GENERATE" && <FormControl fullWidth>
+              <InputLabel>Độ dài truyện</InputLabel>
+              <Select label="Độ dài truyện" value={config.storyLength} onChange={(event) => setConfig({ ...config, storyLength: event.target.value as VideoProjectConfig["storyLength"] })}>
+                <MenuItem value="SHORT">Ngắn</MenuItem><MenuItem value="MEDIUM">Vừa</MenuItem><MenuItem value="LONG">Dài</MenuItem>
+              </Select>
+            </FormControl>}
+            <Alert severity="info">Giữ đầy đủ cốt truyện, đọc nối tiếp từng đoạn. Thời lượng video theo audio thực tế; ảnh/video nền tự kéo dài theo lời kể.
+              {config.contentMode === "USER_STORY" && ` Ước tính trước khi có audio: ${Math.ceil(estimateDuration(config.story || "", config.audience))} giây.`}
+            </Alert>
 
             <Button variant="contained" size="large" disabled={starting || (!!job && !["IMAGES", "COMPLETED", "FAILED"].includes(job.status))} onClick={start}>{starting ? "Đang tạo…" : "Tạo storyboard mới"}</Button>
           </Stack>
@@ -178,7 +185,7 @@ export default function HomePage() {
             {job.error && <Alert severity="error" sx={{ mt: 2 }}>{job.error}</Alert>}
             {["IMAGES", "COMPLETED"].includes(job.status) && !job.outputPath && (
               <Alert severity="success" sx={{ mt: 2 }}>
-                Storyboard đã sẵn sàng. Upload ảnh cho từng cảnh bên dưới, duyệt nội dung rồi tạo video MP4.
+                Truyện đã sẵn sàng. Chọn nền chung và giọng đọc bên dưới, duyệt nội dung rồi tạo MP4.
               </Alert>
             )}
           </Paper>

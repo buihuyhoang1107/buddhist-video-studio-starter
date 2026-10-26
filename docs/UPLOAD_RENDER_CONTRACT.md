@@ -1,5 +1,8 @@
 # Upload and render contract
 
+The narration-first extension in `NARRATION_CONTRACT.md` supersedes the silent-only,
+ten-scene, and voice limitations below. This document records the original milestone.
+
 This change defines the shared Lead/Core contract before implementing Video/UX.
 Content/AI interfaces remain unchanged. Implementation is sequential in this workstream.
 

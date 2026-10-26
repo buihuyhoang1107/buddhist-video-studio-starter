@@ -13,6 +13,9 @@ export interface VideoProjectConfig {
   voiceMode: VoiceMode;
   mediaMode: MediaMode;
   durationSeconds: number;
+  durationMode?: "CONTENT" | "TARGET";
+  backgroundMode?: "PER_SCENE" | "SINGLE_IMAGE" | "LOOP_VIDEO";
+  storyLength?: "SHORT" | "MEDIUM" | "LONG";
   theme?: string;
   story?: string;
   referenceStoryIds?: string[];
@@ -50,4 +53,12 @@ export interface Scene {
 export interface Storyboard {
   title: string;
   scenes: Scene[];
+  background?: { kind: "IMAGE" | "VIDEO"; path: string };
+  audio?: {
+    path: string;
+    provider: "USER_AUDIO" | "LOCAL_TTS";
+    durationSeconds: number;
+    timing: "MEASURED_SEGMENTS" | "ESTIMATED_SEGMENTS";
+    fingerprint?: string;
+  };
 }

@@ -24,22 +24,28 @@ npm run dev
 
 Optional local AI:
 - Ollama for story/script generation.
-- ComfyUI image generation and local TTS are planned; the current renderer uses uploaded images with no voice.
+- VieNeu open-source local TTS for Vietnamese narration; uploaded narration is also supported.
+- ComfyUI image generation is planned. Upload one image, a looping background video, or individual scene images.
 
 ## Create an MP4
 
-1. Choose your story (or Ollama), uploaded images, and no voice; create the storyboard.
-2. Read every scene and upload a PNG, JPEG, or WebP image (maximum 10 MB) for each.
-3. Confirm you have reviewed the script, subtitles, and visuals, then click **Tạo video MP4**.
-4. Keep the Next.js process running. When rendering completes, preview and download the MP4.
-5. To replace one visual, upload a new image for that scene and render again. Unchanged
+1. Enter the complete story (or ask Ollama to write a short/medium/long connected story).
+2. Choose a shared still image or looping MP4/WebM background; individual scene images remain optional.
+3. Upload the complete narration, or choose local VieNeu TTS. Video length follows actual audio;
+   before speech exists, the UI labels text-based timing as an estimate. No target duration is required.
+4. Confirm you have reviewed the script, subtitles, visuals, and uploaded audio, then click **Tạo video MP4**.
+5. Keep the Next.js process running. When rendering completes, preview and download the MP4.
+6. To replace one visual, upload a new background or scene image and render again. Unchanged
    scene clips are reused; the script and other scenes are preserved.
 
 The last opened job is restored after refresh. To resume an older job, paste its ID into
-**Tiếp tục job đã tạo**. Old jobs with voice selected can explicitly consent to render
-without voice without creating a new storyboard. Output is 1080×1920, H.264, 25 fps,
+**Tiếp tục job đã tạo**. Old jobs can choose a voice source at render time without
+creating a new storyboard. Output is 1080×1920, H.264, 25 fps,
 with Vietnamese subtitles and letterboxing to preserve uploaded image proportions.
-Scene transitions are direct cuts in this milestone; audio, pan/zoom, and crossfade are pending.
+Scene transitions are direct cuts; pan/zoom and crossfade are pending. Local TTS segment PCM
+is joined without inserted gaps and encoded as one continuous AAC track. Uploaded audio takes
+priority over TTS. Its total duration is exact; subtitle timings are estimated proportionally.
+See [narration setup](docs/NARRATION_SETUP.md) to run the free local VieNeu speech service.
 
 ## Validation
 
@@ -55,6 +61,15 @@ upload validation, corrupted-image retry, real FFmpeg rendering, streaming, down
 and cache reuse after replacing one scene. It does not alter existing jobs.
 Set `STUDIO_BUILD_DIR=.next-validation` when building alongside a running development
 server to avoid sharing its `.next` files.
+
+To verify the narration flow with an isolated speech test service (synthetic tones, not real
+voice quality), run:
+
+```powershell
+$env:STUDIO_BUILD_DIR = '.next-validation'
+npm run build
+npm run test:narration
+```
 
 ## Important
 

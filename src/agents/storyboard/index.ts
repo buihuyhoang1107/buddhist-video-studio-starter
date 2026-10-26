@@ -1,30 +1,25 @@
 import { randomUUID } from "node:crypto";
 import type { GeneratedContent, Storyboard, VideoProjectConfig } from "@/core/contracts/project";
-
-function splitSentences(text: string) {
-  return text
-    .split(/(?<=[.!?…])\s+/)
-    .map((x) => x.trim())
-    .filter(Boolean);
-}
+import { estimateDuration, fitAudioDuration, splitNarration } from "@/core/narration/timing";
 
 export async function createStoryboard(
   config: VideoProjectConfig,
   content: GeneratedContent
 ): Promise<Storyboard> {
-  const sentences = splitSentences(`${content.hook}. ${content.story} ${content.lesson} ${content.gentleCta ?? ""}`);
-  const sceneCount = Math.max(4, Math.min(10, sentences.length));
-  const duration = Math.max(3, Math.round(config.durationSeconds / sceneCount));
+  const sentences = splitNarration(content.story);
+  if (!sentences.length) throw new Error("Nội dung truyện không được để trống.");
 
-  return {
+  const board: Storyboard = {
     title: content.title,
-    scenes: sentences.slice(0, 10).map((sentence) => ({
+    scenes: sentences.map((sentence) => ({
       id: randomUUID(),
-      duration,
+      duration: estimateDuration(sentence, config.audience),
       narration: sentence,
       subtitle: sentence,
       visualPrompt: `${config.audience === "CHILD" ? "gentle Vietnamese children's story illustration" : "peaceful Vietnamese contemplative illustration"}, ${sentence}, vertical composition, warm light, no text in image`,
       imageSource: config.imageMode === "USER_UPLOAD" ? "USER_ASSET" : "GENERATE"
     }))
   };
+  if (config.durationMode === "TARGET") fitAudioDuration(board.scenes, config.durationSeconds);
+  return board;
 }

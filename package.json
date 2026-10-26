@@ -9,7 +9,9 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "node --test tests/video.test.cjs",
-    "test:video": "node --test tests/video.integration.cjs"
+    "test:video": "node --test tests/video.integration.cjs",
+    "test:narration": "node --test tests/narration.integration.cjs",
+    "tts": "node scripts/start-vieneu.cjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

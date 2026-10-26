@@ -11,10 +11,13 @@ export class OllamaContentProvider implements ContentProvider {
         : "Use gentle, respectful Vietnamese.";
 
     const prompt = `
-Create a short Buddhist-inspired educational story in Vietnamese.
+Create a coherent Buddhist-inspired educational story in Vietnamese, suitable for continuous spoken narration.
 Audience: ${config.audience}
 Theme: ${config.theme ?? config.title}
-Target duration: ${config.durationSeconds} seconds
+Length guidance: ${config.storyLength === "LONG" ? "700-1000" : config.storyLength === "SHORT" ? "100-200" : "300-500"} Vietnamese space-separated syllables. Complete the plot naturally; do not force a fixed duration.
+Put the ENTIRE spoken text (opening, connected events, and ending) in story, in reading order.
+Do not use headings, bullet points, scene labels or repeated introductions. Each passage flows into the next.
+Embed the gentle lesson naturally in the story. hook, lesson, gentleCta are optional metadata, not additional spoken text.
 Rules: ${audienceRule}
 Do not fabricate a quote from the Buddha. If not using a verified scripture source, sourceStatus must be STORY or INTERPRETATION.
 Return JSON only with: title, hook, story, lesson, gentleCta, sourceStatus, sourceReferences.

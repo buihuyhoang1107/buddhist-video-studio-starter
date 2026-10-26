@@ -3,7 +3,7 @@ function timestamp(seconds: number) {
   return `${Math.floor(total / 360000)}:${String(Math.floor(total / 6000) % 60).padStart(2, "0")}:${String(Math.floor(total / 100) % 60).padStart(2, "0")}.${String(total % 100).padStart(2, "0")}`;
 }
 
-export function sceneSubtitles(text: string, duration: number, senior: boolean) {
+export function sceneSubtitles(text: string, duration: number, senior: boolean, offset = 0) {
   // Escape ASS control syntax before adding intentional line breaks.
   const clean = text.replace(/[\\{}]/g, "").replace(/\s+/g, " ").trim();
   const lines: string[] = [];
@@ -26,6 +26,17 @@ Style: Default,Arial,${senior ? 64 : 56},&H00FFFFFF,&H00FFFFFF,&H00202020,&H9000
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-${pages.map((page, i) => `Dialogue: 0,${timestamp(i * duration / pages.length)},${timestamp((i + 1) * duration / pages.length)},Default,,0,0,0,,${page}`).join("\n")}
+${pages.map((page, i) => `Dialogue: 0,${timestamp(offset + i * duration / pages.length)},${timestamp(offset + (i + 1) * duration / pages.length)},Default,,0,0,0,,${page}`).join("\n")}
 `;
+}
+
+export function storySubtitles(scenes: Array<{ subtitle: string; duration: number }>, senior: boolean) {
+  const header = sceneSubtitles("", 1, senior).split("Dialogue:")[0];
+  let offset = 0;
+  const events = scenes.flatMap((scene) => {
+    const lines = sceneSubtitles(scene.subtitle, scene.duration, senior, offset).split("\n").filter(line => line.startsWith("Dialogue:"));
+    offset += scene.duration;
+    return lines;
+  });
+  return header + events.join("\n") + "\n";
 }

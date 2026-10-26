@@ -20,10 +20,20 @@ Failure state: `FAILED`.
 
 `IMAGES` pauses for manual per-scene uploads and human review. Rendering resumes through
 `POST /api/jobs/:id/render` only after the saved Dharma review passes and the user confirms
-approval. This milestone exports a silent MP4 with burned-in subtitles; AI image generation
-and voice remain pending. Legacy storyboard-only COMPLETED jobs can resume by ID.
+approval. The narration-first extension supports local TTS, uploaded narration, and a shared
+still/looping video background, as well as silent export. AI image generation remains pending.
+Legacy storyboard-only COMPLETED jobs can resume by ID.
 New COMPLETED jobs have an outputPath. Failed renders retain inputs for retry, and unchanged
 scene clips are reused when one image changes. See `docs/UPLOAD_RENDER_CONTRACT.md`.
+
+## Narration-first timing
+
+The complete `content.story` is spoken once in order, without extra hook/lesson/CTA text.
+New jobs estimate timing from full story text, not a target number of seconds. Local TTS
+then measures each segment's audio, joins it without inserted gaps, and sets the final length.
+Uploaded narration takes priority and sets the total duration; its subtitle segments use an
+explicitly labeled text-proportional estimate. One background image or video repeats until
+the audio finishes. See `docs/NARRATION_CONTRACT.md` and `docs/NARRATION_SETUP.md`.
 
 ## Important behavior
 
